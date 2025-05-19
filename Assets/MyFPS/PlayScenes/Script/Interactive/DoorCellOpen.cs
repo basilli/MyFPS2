@@ -16,8 +16,11 @@ namespace MyFPS
         // [ ] - 2) 액션 UI.
         public GameObject actionUI;
         public TextMeshProUGUI actionText;
+        // [ ] - [ ] - 1) 크로스헤어.
+        public GameObject extraCross;
+        // [ ] - [ ] - 2) 문구.
         [SerializeField] private string action = "Open The Door";       // ) 유니티의 Inspector에서 ActionText의 내용을 적을 수 있음.
-        // [ ] - 3) 애니메이션.
+        // [ ] - 4) 애니메이션.
         public Animator animator;
         // [ ] - [ ] - 1) 애니메이션 파라미터 스트링.
         private string paramIsOpen = "IsOpen";
@@ -39,13 +42,16 @@ namespace MyFPS
         // [ ] - 2) OnMouseOver.
         private void OnMouseOver()
         {
+            // [ ] - [ ] - 1) 크로스헤어 키기.
+            extraCross.SetActive(true);
+
             if (theDistance <= 2f)
             {
                 ShowActionUI();
 
                 // )        ToDo : New Input System 구현.
 
-                // [ ] - [ ] - 1) 키 입력 체크.
+                // [ ] - [ ] - 2) 키 입력 체크.
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     // [ ] - [ ] - [ ] - 1) UI 숨기기 + 문열기 + Box Collider 제거.
@@ -63,7 +69,10 @@ namespace MyFPS
         // [ ] - 3) OnMouseExit.
         private void OnMouseExit()
         {
-                HideActionUI();
+            // [ ] - [ ] - 1) 크로스헤어 끄기.
+            extraCross.SetActive(false);
+
+            HideActionUI();
         }
         #endregion Unity Event Method
 
@@ -79,7 +88,7 @@ namespace MyFPS
             actionUI.SetActive(true);
             actionText.text = action;
         }
-
+        
         // [ ] - 2) HideActionUI → Action UI 숨기기.
         private void HideActionUI()
         {

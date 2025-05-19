@@ -44,7 +44,6 @@ namespace MySample
         {
             // [ ] - [ ] - 1) 그라운드 체크.
             isGround = GroundCheck();
-
             // [ ] - [ ] - 2) 방향
             Vector3 moveDir = transform.right * inputMove.x + transform.forward * inputMove.y;
             // [ ] - [ ] - 3) 이동
