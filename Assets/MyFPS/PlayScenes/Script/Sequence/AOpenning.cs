@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;       // ) 코루틴 함수 활성화.
 
@@ -18,7 +19,13 @@ namespace MyFPS
         public SceneFader fader;
         // [ ] - 3) 시나리오 대사 처리.
         public TextMeshProUGUI sequenceText;
-        [SerializeField] private string sequence = "I need get out of here!";
+        [SerializeField] private string sequence01 = "... Where am I?";
+        [SerializeField] private string sequence02 = "I need get out of here!";
+        // [ ] - 4) 배경음.
+        public AudioSource bgm01;
+        // [ ] - 5) 대사 및 음성.
+        public AudioSource line01;
+        public AudioSource line02;
         #endregion Variables
 
 
@@ -30,7 +37,11 @@ namespace MyFPS
         // [ ] - 1) Start.
         private void Start()
         {
-            // [ ] - [ ] - 1) SequencePlay 실행.
+            // [ ] - [ ] - 1) 커서 제어.
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            // [ ] - [ ] - 2) SequencePlay 실행 → 오프닝 연출.
             StartCoroutine(SequencePlay());   
         }
         #endregion Unity Event Method
@@ -39,23 +50,32 @@ namespace MyFPS
 
 
 
-        // [3] Unity Event Method.
+        // [3] Custom Method.
         #region Custom Method
         // [ ] - 1) SequencePlay → 오프닝 연출 코루틴 함수.
         IEnumerator SequencePlay()
         {
             // [ ] - [ ] - 1) 플레이어 캐릭터 비활성화.
-            thePlayer.SetActive(false);
-
+            // )        thePlayer.SetActive(false);
+            PlayerInput input = thePlayer.GetComponent<PlayerInput>();
+            input.enabled = false;
             // [ ] - [ ] - 2) 페이드인 연출(1초 대기 후 페이드인 효과).
-            fader.FadeStart(1f);
+            fader.FadeStart(4f);
             // [ ] - [ ] - 3) 화면 하단에 시나리오 텍스트 화면 출력(3초).
-            sequenceText.text = sequence;
+            sequenceText.text = sequence01;
+            line01.Play();
+            yield return new WaitForSeconds(3f);
+
+            sequenceText.text = sequence02;
+            line02.Play();
             // [ ] - [ ] - 4) 3초 후에 시나리오 텍스트 사라짐.
             yield return new WaitForSeconds(3f);
             sequenceText.text = "";
-            // [ ] - [ ] - 5) 플레이어 캐릭터 활성화.
-            thePlayer.SetActive(true);
+            // [ ] - [ ] - 5) 배경음 플레이.
+            bgm01.Play();
+            // [ ] - [ ] - 6) 플레이어 캐릭터 활성화.
+            // )        thePlayer.SetActive(true);
+            input.enabled = true;
 
             yield return null;
         }

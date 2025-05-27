@@ -13,23 +13,22 @@ namespace MyFPS
         #region Variable
         // [ ] - 1) 참조.
         private CharacterController controller;
-        // [ ] - 2) 입력 → WASD를 입력한 값을 가져옴.
-        private Vector2 inputVector;
+        public PistolShoot pistolShoot;
+        // [ ] - 2) 입력 → 이동.
+        private Vector2 inputMove;
         // [ ] - 3) 이동.
         [SerializeField] private float moveSpeed = 10f;
-        // [ ] - [ ] - 1) 이동 입력값.
-        private Vector2 inputMove;
         // [ ] - 4) 중력.
         private float gravity = -9.81f;
         // [ ] - [ ] - 1) 중력까지 계산한 이동속도.
-        private Vector3 velocity;
+        [SerializeField] private Vector3 velocity;
         // [ ] - 5) 그라운드 체크 → 발바닥 위치.
         public Transform groundCkeck;
         // [ ] - [ ] - 1) 체크하는 구의 반경.
         [SerializeField] private float checkRange = 0.2f;
-        // [ ] - [ ] - 2) 그라운드 레이어 판별
+        // [ ] - [ ] - 2) 그라운드 레이어 판별.
         [SerializeField] private LayerMask groundMask;
-        // [ ] - ６) 점프높이。
+        // [ ] - 6) 점프높이.
         [SerializeField] private float jumpHeight = 1f;
         #endregion Variable
 
@@ -53,7 +52,7 @@ namespace MyFPS
             bool isGrounded = GroundCheck();
             if (controller.isGrounded && velocity.y < 0f)
             {
-                velocity.y = -5f;
+                velocity.y = -10f;
             }
             // [ ] - [ ] - 2) 방향.
             // [ ] - [ ] - [ ] - 1) Global 축 이동 → 글로벌 공간계로 이동함.
@@ -74,6 +73,15 @@ namespace MyFPS
 
         // [3] Custyom Method.
         #region Custyom Method
+
+
+
+
+
+
+
+
+
         // [ ] - 1) OnMove → Move Input 시스템이 등록할 함수.
         public void OnMove(InputAction.CallbackContext context)
         {
@@ -87,13 +95,27 @@ namespace MyFPS
             // [ ] - 1) 캐릭터가 땅에 닿아있을 때만 실행.
             if (context.started && GroundCheck())
             {
-
+                // [ ] - [ ] - 1) 점프 높이만큼 뛰기위한 속도 구하기.
+                velocity.y = Mathf.Sqrt(-2f * gravity * jumpHeight);
             }
-            // [ ] - 2) 점프 높이만큼 뛰기위한 속도 구하기.
-            velocity.y = Mathf.Sqrt(-2f * gravity * jumpHeight);
         }
 
-        // [ ] - 3) GroundCheck → 그라운드 체크.
+        // [ ] - 3) OnFire.
+        public void OnFire(InputAction.CallbackContext context)
+        {
+            // )        Debug.Log(PlayerDataManager.Instance.Weapon);
+            // [ ] - [ ] - 1) 무장체크 → 플레이어가 총을 들었는지 확인.
+            if (PlayerDataManager.Instance.Weapon == WeaponType.None)
+                return;
+            // [ ] - [ ] - 2) 키다운 → 버튼 다운.
+            if (context.started)
+            {
+                // [ ] - [ ] - [ ] - 1) StartCoroutine → Shoot 실행.
+                pistolShoot.Fire();
+            }
+        }
+
+        // [ ] - 4) GroundCheck → 그라운드 체크.
         bool GroundCheck()
         {
             // [ ] - 1) 캐릭터가 땅에 닿아있는지 확인.
@@ -102,6 +124,3 @@ namespace MyFPS
         #endregion Custyom Method
     }
 }
-
-// [ ] - ) 
-// [ ] - [ ] - )
