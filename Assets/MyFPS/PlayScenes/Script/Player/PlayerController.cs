@@ -106,7 +106,10 @@ namespace MyFPS
             // )        Debug.Log(PlayerDataManager.Instance.Weapon);
             // [ ] - [ ] - 1) 무장체크 → 플레이어가 총을 들었는지 확인.
             if (PlayerDataManager.Instance.Weapon == WeaponType.None)
+            {
+                Debug.Log("WeaponType : None");
                 return;
+            }
             // [ ] - [ ] - 2) 키다운 → 버튼 다운.
             if (context.started)
             {

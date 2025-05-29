@@ -13,9 +13,12 @@ public class MainMenu : MonoBehaviour
 {
     // [1] Variable.
     #region Variable
-    // [ ] - 1) 씬 변경.
+    // [ ] - 1) 참조.
+    private AudioManager audioManager;
+    // [ ] - 2) 씬 변경.
     public SceneFader fader;
     [SerializeField] private string loadToScene = "MainScene01";
+
     #endregion Variable
 
 
@@ -35,8 +38,12 @@ public class MainMenu : MonoBehaviour
     // [ ] - 1) Start.
     private void Start()
     {
-        // [ ] - [ ] - 1) 씬 시작시 페이드인 효과. 
+        // [ ] - [ ] - 1) 참조. 
+        audioManager = AudioManager.Instance;
+        // [ ] - [ ] - 2) 씬 시작시 페이드인 효과. 
         fader.FadeStart();
+        // [ ] - [ ] - 3) 메뉴 배경음 플레이.
+        AudioManager.Instance.PlayBgm("MenuMusic");
     }
     #endregion Unity Event Method
 
@@ -49,7 +56,9 @@ public class MainMenu : MonoBehaviour
     // [ ] - 1) NewGame.
     public void NewGame()
     {
-        // [ ] - [ ] - 1) 새 게임하러 가기.
+        // [ ] - [ ] - 1) 메뉴 선택 사운드.
+        audioManager.Play("MenuSelect");
+        // [ ] - [ ] - 2) 새 게임하러 가기.
         fader.FadeTo(loadToScene);
         // )        Debug.Log("New Game");
     }
