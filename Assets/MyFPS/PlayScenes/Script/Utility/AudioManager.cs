@@ -136,6 +136,12 @@ namespace MyFPS
             sound.source.Play();
         }
 
+        // [ ] - 4) StopBgm → 배경음 플레이.
+        public void StopBgm()
+        {
+            Stop(bgmSound);
+        }
+
 
         #endregion Custom Method
 

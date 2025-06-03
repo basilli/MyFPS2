@@ -3,10 +3,6 @@ using UnityEngine;
 
 /* [0] 개요 : MainMenu
 		- 메인메뉴 씬을 관리하는 클래스.
-		- 
-		- 
-		- 
-		- 
 */
 
 public class MainMenu : MonoBehaviour

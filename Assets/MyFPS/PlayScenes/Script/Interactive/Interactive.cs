@@ -18,7 +18,9 @@ public class Interactive : MonoBehaviour
     public TextMeshProUGUI actionText;
     // [ ] - [ ] - 1) 크로스헤어.
     public GameObject extraCross;
-    // [ ] - [ ] - 2) 문구.
+    // [ ] - [ ] - 2) 인터랙티브 기능 사용 여부.
+    protected bool unInteractive = false;
+    // [ ] - [ ] - 3) 문구.
     [SerializeField] protected string action = "Do Interactive Action";       // ) 유니티의 Inspector에서 ActionText의 내용을 적을 수 있음.
     #endregion Variable
 
@@ -38,30 +40,35 @@ public class Interactive : MonoBehaviour
     // [ ] - 2) OnMouseOver.
     private void OnMouseOver()
     {
-        // [ ] - [ ] - 1) 크로스헤어 키기.
+        // [ ] - [ ] - 1) 인터랙티브 기능 끄기.
+        if (unInteractive)
+            return;
+        // [ ] - [ ] - 2) 크로스헤어 키기.
         extraCross.SetActive(true);
-        // [ ] - [ ] - 2) UI 키기.
+        // [ ] - [ ] - 3) UI 키기.
         if (theDistance <= 2f)
         {
             ShowActionUI();
             // [ ] - [ ] - [ ] - 1) 키 입력 체크.
             if (Input.GetKeyDown(KeyCode.E))
             {
-                // [ ] - [ ] - [ ] - [ ] - 1) UI 숨기기.
+                // [ ] - [ ] - [ ] - [ ] - 1) .
+                extraCross.SetActive(false);
+                // [ ] - [ ] - [ ] - [ ] - 2) UI 숨기기.
                 HideActionUI();
-                // [ ] - [ ] - [ ] - [ ] - 2) 액션 실행.
+                // [ ] - [ ] - [ ] - [ ] - 3) 액션 실행.
                 DoAction();
             }
         }
         else
         {
-            // [ ] - [ ] - [ ] - [ ] - 3) 오브젝트와 거리가 멀어지면 UI 숨기기.
+            // [ ] - [ ] - [ ] - [ ] - 4) 오브젝트와 거리가 멀어지면 UI 숨기기.
             HideActionUI();
         }
     }
 
     // [ ] - 3) OnMouseExit.
-    protected private void OnMouseExit()
+    private void OnMouseExit()
     {
         // [ ] - [ ] - 1) 크로스헤어 끄기.
         extraCross.SetActive(false);
