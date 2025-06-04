@@ -52,10 +52,5 @@ namespace MyFPS
         // [4] Custom Method.
         #region Custom Method
         #endregion Custom Method
-
-        // [ ] - ) .
-        // [ ] - [ ] - ) .
-        // [ ] - [ ] - [ ] - ) .
-        // [ ] - [ ] - [ ] - [ ] - ) .
     }
 }

@@ -3,10 +3,6 @@ using UnityEngine;
 
 /* [0] 개요 : LookAtMouse
 		- 오브젝트가 마우스 포인터를 바라봄.
-		- 
-		- 
-		- 
-		- 
 */
 public class LookAtMouse : MonoBehaviour
 {
@@ -20,15 +16,7 @@ public class LookAtMouse : MonoBehaviour
 
 
 
-    // [2] Property.
-    #region Property
-    #endregion Property
-
-
-
-
-
-    // [3] Unity Event Method.
+    // [2] Unity Event Method.
     #region Unity Event Method
     // [ ] - 1) Update.
     private void Update()
@@ -45,7 +33,7 @@ public class LookAtMouse : MonoBehaviour
 
 
 
-    // [4] Custom Method.
+    // [3] Custom Method.
     #region Custom Method
     // [ ] - 1) 월드 포지션값 가져오기 → 마우스의 위치값을 이용.
     private Vector3 ScreenToWorld()
@@ -70,6 +58,3 @@ public class LookAtMouse : MonoBehaviour
     }
     #endregion Custom Method
 }
-
-// [ ] - ) 
-// [ ] - [ ] - ) 

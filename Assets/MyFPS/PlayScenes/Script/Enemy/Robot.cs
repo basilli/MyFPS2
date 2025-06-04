@@ -13,7 +13,9 @@ namespace MyFPS
         R_Idle = 0, 
         R_Walk = 1,
         R_Attack = 2, 
-        R_Death = 3
+        R_Death = 3,
+        R_Patrol,
+        R_Chase
     }
     public class Robot : MonoBehaviour
     {

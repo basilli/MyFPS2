@@ -141,11 +141,6 @@ namespace MyFPS
         {
             Stop(bgmSound);
         }
-
-
         #endregion Custom Method
-
-        // [ ] - ) 
-        // [ ] - [ ] - ) 
     }
 }
