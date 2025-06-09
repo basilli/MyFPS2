@@ -62,7 +62,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         // [ ] - [ ] - 1) VFX.
         damageFlash.SetActive(true);
-        // [ ] - [ ] - 2) SFX.
+        // [ ] - [ ] - 2) 카메라 흔들기.
+        CinemachineCameraShake.Instance.Shake(2f, 1f, 0.75f);
+        // [ ] - [ ] - 3) SFX.
         int randNum = Random.Range(1, 4);
         if (randNum == 1)
         {

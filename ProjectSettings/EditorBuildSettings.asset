@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyFPS/PlayScenes/Scene/GameOver.unity
     guid: ee0d819e9bc88f7469e78f570a35ac9b
+  - enabled: 1
+    path: Assets/MyFPS/PlayScenes/Scene/MainMenu.unity
+    guid: be0e8a279bc3a124b9c45d2b274c9c24
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

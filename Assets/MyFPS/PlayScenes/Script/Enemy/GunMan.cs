@@ -28,14 +28,20 @@ namespace MyFPS
         private float idleCountdown = 0f;
         // [ ] - 6) 디텍팅 거리.
         [SerializeField] private float detectingRange = 15f;
-        // [ ] - 7) 플레이어 위치
+        // [ ] - 7) .
+        private float distance;
+        // [ ] - 8) .
+        private Vector3 originPosition;
+        // [ ] - 9) 플레이어 위치
         private Vector3 target;
-        // [ ] - 8) 공격(총 발사) → 멈추고 Fire 애니메이션.
+        // [ ] - 10) 공격(총 발사) → 멈추고 Fire 애니메이션.
         [SerializeField] private float attackRange = 5f;
-        // [ ] - 9) 애니메이션 파라미터.
+        // [ ] - 11) 공격 데미지.
+        [SerializeField] private float attackDamage = 5f;
+        // [ ] - 12) 애니메이션 파라미터.
         private string enemyState = "EnemyState";
         private string fire = "Fire";
-        // [ ] - 10) 어택 타이머.
+        // [ ] - 13) 어택 타이머.
         [SerializeField] private float attackTime = 2f;
         private float attackCountdown = 0f;
         #endregion Variable
@@ -74,7 +80,8 @@ namespace MyFPS
         // [ ] - 4) Start.
         private void Start()
         {
-            // [ ] - [ ] - 1) .
+            // [ ] - [ ] - 1) 초기화.
+            originPosition = transform.position;
             ChangeState(Robotstate.R_Idle);
         }
 
@@ -85,18 +92,34 @@ namespace MyFPS
             if (gunmanHealth.IsDeath)
                 return;
 
-            // [ ] - [ ] - 2) 적 디텍팅.
-            target = new Vector3(thePlayer.position.x, 0f, thePlayer.position.z);
-            float distance = Vector3.Distance(transform.position, target);
-            if (distance <= attackRange)        // ) attackRange = 5.
+            // [ ] - [ ] - 2) 플레이어 위치 확인 → 안전지역에 있을 경우.
+            if (PlayerController.safeZoneIn)
             {
-                // [ ] - [ ] - [ ] - 1) 공격상태로 변경.
-                ChangeState(Robotstate.R_Attack);
+                // [ ] - [ ] - [ ] - 1) .
+                if (gunmanState == Robotstate.R_Attack || gunmanState == Robotstate.R_Chase)
+                {
+                    // [ ] - [ ] - [ ] - [ ] - 1) 제자리로 돌아가기.
+                    BackHome();
+                    return;
+                }
             }
-            if (distance <= detectingRange)         // ) detectingRange = 15.
+            else        // ) EnemyZone에 있을 경우.
             {
-                ChangeState(Robotstate.R_Chase);        // ) 추격상태로 변경.
+                // [ ] - [ ] - 2) 적 디텍팅.
+                target = new Vector3(thePlayer.position.x, 0f, thePlayer.position.z);
+                distance = Vector3.Distance(transform.position, target);
+                if (distance <= attackRange)        // ) attackRange = 5.
+                {
+                    // [ ] - [ ] - [ ] - 1) 공격상태로 변경.
+                    ChangeState(Robotstate.R_Attack);
+                }
+                else if (distance <= detectingRange)         // ) detectingRange = 15.
+                {
+                    ChangeState(Robotstate.R_Chase);        // ) 추격상태로 변경.
+                }
             }
+
+            
 
             // [ ] - [ ] - 3) 상태구현.
             switch (gunmanState)
@@ -118,6 +141,10 @@ namespace MyFPS
                     break;
                 // [ ] - [ ] - [ ] - 2) R_Walk.
                 case Robotstate.R_Walk:
+                    if (agent.remainingDistance <= 0.1f)        // ) 웨이포인트 도착 판정.
+                    {
+                        ChangeState(Robotstate.R_Idle);
+                    }
                     break;
                 // [ ] - [ ] - [ ] - 3) R_Attack.
                 case Robotstate.R_Attack:
@@ -127,20 +154,22 @@ namespace MyFPS
                         animator.SetTrigger(fire);      // 발사.
                         attackCountdown = 0f;       // 타이머 초기화.
                     }
+                    transform.LookAt(target);       // 타겟을 바라본다.
                     break;
                 // [ ] - [ ] - [ ] - 4) R_Death.
                 case Robotstate.R_Death:
                     break;
                 // [ ] - [ ] - [ ] - 5) R_Patrol.
                 case Robotstate.R_Patrol:
-                    if (agent.remainingDistance <= 0.2f)        // ) 웨이포인트 도착 판정.
-                    {
-                        ChangeState(Robotstate.R_Idle);
-                    }
+
                     break;
                 // [ ] - [ ] - [ ] - 6) R_Chase.
                 case Robotstate.R_Chase:
                     agent.SetDestination(target);       // ) 타겟을 향해 이동(실시간으로 목표지점을 변경).
+                    if (distance > detectingRange)      // ) 플레이어가 디텍팅 거리에서 벗어남.
+                    {
+                        BackHome(); // ) 제자리로 되돌아가기.
+                    }
                     break;
             }
         }
@@ -148,8 +177,12 @@ namespace MyFPS
         // [ ] - 6) OnDrawGizmosSelected.
         private void OnDrawGizmosSelected()
         {
+            // [ ] - [ ] - 1) 탐지범위.
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, detectingRange);
+            // [ ] - [ ] - 2) 공격범위.
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, attackRange);
         }
         #endregion Unity Event Method
 
@@ -183,6 +216,7 @@ namespace MyFPS
             {
                 animator.SetInteger(enemyState, (int)gunmanState);
                 idleTime = Random.Range(2f, 5f);
+                agent.ResetPath();      // ) 네비게이션 패스 초기화.
             }
             else if (gunmanState == Robotstate.R_Chase)
             {
@@ -222,8 +256,42 @@ namespace MyFPS
             // [ ] - [ ] - 1) 죽음 처리.
             ChangeState(Robotstate.R_Death);
             // [ ] - [ ] - 2) 추가구현 내용.
+            agent.enabled = false;
             // [ ] - [ ] - 3) .
             this.GetComponent<BoxCollider>().enabled = false;
+        }
+
+        // [ ] - 4) BackHome → 제자리로 되돌아가기..
+        public void BackHome()
+        {
+            // [ ] - [ ] - 1) 패트롤 여부 체크.
+            if (wayPoints.Length > 1)
+            {
+                // [ ] - [ ] - [ ] - 1) 패트롤 상태 변환.
+                ChangeState(Robotstate.R_Patrol);
+            }
+            else
+            {
+                // [ ] - [ ] - [ ] - 2) 걷기.
+                ChangeState(Robotstate.R_Walk);         // ) 지정한 위치로 이동.
+                agent.SetDestination(originPosition);
+            }
+            // [ ] - [ ] - 2) 조준 애니 해제.
+            animator.SetLayerWeight(1, 0);
+        }
+
+
+
+        // [ ] - 5) Attack.
+        public void Attack()
+        {
+            // [ ] - [ ] - 1) 타이머 내용.
+            Debug.Log($"플레이어에게 {attackDamage}를 준다.");
+            IDamageable damageable = thePlayer.GetComponent<IDamageable>();
+            if (damageable != null)
+            {
+                damageable.TakeDamage(attackDamage);
+            }
         }
         #endregion Custom Method
 

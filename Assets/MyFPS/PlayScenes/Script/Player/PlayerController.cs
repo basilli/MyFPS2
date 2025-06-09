@@ -14,21 +14,23 @@ namespace MyFPS
         // [ ] - 1) 참조.
         private CharacterController controller;
         public PistolShoot pistolShoot;
-        // [ ] - 2) 입력 → 이동.
+        // [ ] - 2) SafeZone 안에 있는지 여부.
+        public static bool safeZoneIn = true;
+        // [ ] - 3) 입력 → 이동.
         private Vector2 inputMove;
-        // [ ] - 3) 이동.
+        // [ ] - 4) 이동.
         [SerializeField] private float moveSpeed = 10f;
-        // [ ] - 4) 중력.
+        // [ ] - 5) 중력.
         private float gravity = -9.81f;
         // [ ] - [ ] - 1) 중력까지 계산한 이동속도.
         [SerializeField] private Vector3 velocity;
-        // [ ] - 5) 그라운드 체크 → 발바닥 위치.
+        // [ ] - 6) 그라운드 체크 → 발바닥 위치.
         public Transform groundCkeck;
         // [ ] - [ ] - 1) 체크하는 구의 반경.
         [SerializeField] private float checkRange = 0.2f;
         // [ ] - [ ] - 2) 그라운드 레이어 판별.
         [SerializeField] private LayerMask groundMask;
-        // [ ] - 6) 점프높이.
+        // [ ] - 7) 점프높이.
         [SerializeField] private float jumpHeight = 1f;
         #endregion Variable
 
