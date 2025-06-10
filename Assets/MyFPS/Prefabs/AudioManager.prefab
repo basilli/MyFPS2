@@ -45,3 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sounds: []
+  audioMixer: {fileID: 24100000, guid: c4a5dc71ed2c7c94491349c09581f881, type: 2}

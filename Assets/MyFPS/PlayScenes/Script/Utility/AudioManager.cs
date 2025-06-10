@@ -1,5 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /* [0] 개요 : AudioManager
 		- 사운드 속성 데이터를 관리하는 클래스.
@@ -15,26 +15,23 @@ namespace MyFPS
         public Sound[] sounds;
         // [ ] - 2) 배경음 이름.
         private string bgmSound = "";
+        // [ ] - 3) Audio Mixer.
+        public AudioMixer audioMixer;
         #endregion Variable
 
 
 
 
 
-        // [2] Property.
-        #region Property
-        #endregion Property
-
-
-
-
-
-        // [3] Unity Event Method.
+        // [2] Unity Event Method.
         #region Unity Event Method
         protected override void Awake()
         {
             base.Awake();
-            // [ ] - 1) 사운드 데이터 셋팅.
+            // [ ] - 1) Audio Mixer에서 오디오 그룹 가져오기.
+            AudioMixerGroup[] audioMixerGroups = audioMixer.FindMatchingGroups("Master");
+
+            // [ ] - 2) 사운드 데이터 셋팅.
             foreach (var s in sounds)
             {
                 // [ ] - [ ] - [ ] - 1) AudioSource 컴포넌트 추가 및 생성. 
@@ -45,6 +42,16 @@ namespace MyFPS
                 s.source.pitch = s.pitch;
                 s.source.loop = s.loop;
                 s.source.playOnAwake = false;
+                // [ ] - [ ] - [ ] - 3) . 
+                if (s.source.loop)      // ) BGM.
+                {
+                    s.source.outputAudioMixerGroup = audioMixerGroups[1];
+                }
+                else      // ) SFX.
+                {
+                    s.source.outputAudioMixerGroup = audioMixerGroups[2];
+                }
+                // s.source.outputAudioMixerGroup = Bgm/SFX
             }
         }
         #endregion Unity Event Method
