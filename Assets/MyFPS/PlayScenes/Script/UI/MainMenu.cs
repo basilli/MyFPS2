@@ -21,12 +21,15 @@ public class MainMenu : MonoBehaviour
     public GameObject mainMenuUI;
     public GameObject optionUI;
     public GameObject creditCanvas;
+    public GameObject loadGameButton;
     private bool isShowOption = false;
     private bool isShowCredit = false;
     // [ ] - 4) 볼륨조절.
     public AudioMixer audioMixer;
     public Slider bgmSlider;
     public Slider sfxSlider;
+    // [ ] - 5) 게임 데이터.
+    private int sceneNumber;
     #endregion Variable
 
 
@@ -39,8 +42,17 @@ public class MainMenu : MonoBehaviour
     // [ ] - 1) Start.
     private void Start()
     {
-        // [ ] - [ ] - 1) 옵션 저장값 가져오기. 
-        LoadOptions();
+        // [ ] - [ ] - 1) 게임 데이터 가져와서 초기화하기.
+        GameDataInit();
+        // [ ] - [ ] - 2) 메뉴 UI 셋팅.
+        if (sceneNumber >= 0)
+        {
+            loadGameButton.SetActive(true);
+        }
+        else
+        {
+            loadGameButton.SetActive(false);
+        }
         // [ ] - [ ] - 2) 참조. 
         audioManager = AudioManager.Instance;
         // [ ] - [ ] - 3) 씬 시작시 페이드인 효과. 
@@ -76,10 +88,27 @@ public class MainMenu : MonoBehaviour
 
     // [3] Custom Method.
     #region Custom Method
+    // [ ] - [ ] - 1) 게임 데이터 가져와서 초기화하기.
+    private void GameDataInit()
+    {
+        // 옵션 저장 값 가져와서 게임에 적용.
+        LoadOptions();
+        // 게임 플레이 저장값 가져오기 → 빌드번호.
+        // PayerPrefs 모드
+        // )        sceneNumber = PlayerPrefs.GetInt("SceneNumber", -1);        // ) 유니티에서 SceneList에서 0부터 시작하기 때문에 -1로 저장됨.
+        // FileSystem 모드
+        // )        Debug.Log($"{sceneNumber}");
+        PlayData playData = SaveLoad.LoadData();
+        PlayerDataManager.Instance.InitPlayerData(playData);
+        sceneNumber = PlayerDataManager.Instance.SceneNumber;
+
+    }
+
     // [ ] - 1) NewGame.
     public void NewGame()
     {
         // [ ] - [ ] - 1) 메뉴 선택 사운드.
+        audioManager.StopBgm();
         audioManager.Play("MenuSelect");
         // [ ] - [ ] - 2) 새 게임하러 가기.
         fader.FadeTo(loadToScene);
@@ -89,7 +118,11 @@ public class MainMenu : MonoBehaviour
     // [ ] - 2) LoadGame.
     public void LoadGame()
     {
-        Debug.Log("Load Game");
+        // [ ] - [ ] - 1) 메뉴 선택 사운드.
+        audioManager.StopBgm();
+        audioManager.Play("MenuSelect");
+        // [ ] - [ ] - 2) 새 게임하러 가기.
+        fader.FadeTo(sceneNumber);
     }
 
     // [ ] - 3) Options.

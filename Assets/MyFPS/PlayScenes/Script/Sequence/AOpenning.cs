@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;       // ) 코루틴 함수 활성화.
+using UnityEngine.SceneManagement;
 
 /* [0] 개요 : AOpenning
 		- 플레이 씬 오프닝 연출.
@@ -37,11 +38,19 @@ namespace MyFPS
         // [ ] - 1) Start.
         private void Start()
         {
-            // [ ] - [ ] - 1) 커서 제어.
+            // [ ] - [ ] - 1) 게임데이터(씬 번호) 저장.
+            /* PlayerPrefs 모드
+            int sceneNumber = SceneManager.GetActiveScene().buildIndex;
+            PlayerPrefs.SetInt("SceneNumber", sceneNumber);
+            Debug.Log($"Save Scene Number : {sceneNumber}");
+            */
+            // [ ] - [ ] - 2) File System 모드.
+            PlayerDataManager.Instance.SceneNumber = SceneManager.GetActiveScene().buildIndex;
+            SaveLoad.SaveData();
+            // [ ] - [ ] - 3) 커서 제어.
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-
-            // [ ] - [ ] - 2) SequencePlay 실행 → 오프닝 연출.
+            // [ ] - [ ] - 4) SequencePlay 실행 → 오프닝 연출.
             StartCoroutine(SequencePlay());   
         }
         #endregion Unity Event Method
@@ -51,7 +60,7 @@ namespace MyFPS
 
 
         // [3] Custom Method.
-        #region Custom Method
+            #region Custom Method
         // [ ] - 1) SequencePlay → 오프닝 연출 코루틴 함수.
         IEnumerator SequencePlay()
         {

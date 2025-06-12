@@ -11,7 +11,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     #region Variable
     // [ ] - 1) 체력.
     private float currentHealth;
-    [SerializeField] private float maxHealth = 20f;
     private bool isDeath = false;
     // [ ] - 2) 데미지 효과.
     public GameObject damageFlash;
@@ -33,7 +32,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     private void Start()
     {
         // [ ] - [ ] - 1) 초기화.
-        currentHealth = maxHealth;
+        currentHealth = PlayerDataManager.Instance.PlayerHealth;
     }
     #endregion Unity Event Method
 
@@ -48,8 +47,9 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         // [ ] - [ ] - 1)  .
         currentHealth -= damage;
-        Debug.Log($"Player CurrentHealth : {currentHealth}");
-        // [ ] - [ ] - 2)  초기화.
+        // )        Debug.Log($"Player CurrentHealth : {currentHealth}");
+        PlayerDataManager.Instance.PlayerHealth = currentHealth;
+        // [ ] - [ ] - 2)  데미지 연출(SFX, VFX).
         StartCoroutine(DamageEffect());
         if (currentHealth <= 0 && isDeath == false)
         {
@@ -87,7 +87,10 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     {
         // [ ] - [ ] - 1) .
         isDeath = true;
-        // [ ] - [ ] - 2) 죽음처리.
+        // TODO : 게임오버시 플레이한 씬 번호 저장.
+
+
+        // [ ] - [ ] - 3) 죽음처리.
         fader.FadeTo(loadToScene);
     }
     #endregion Custom Method

@@ -3,10 +3,6 @@ using UnityEngine.InputSystem;
 
 /* [0] 개요 : PauseUI
 		- 게임 중 메뉴 관리 클래스.
-		- 
-		- 
-		- 
-		- 
 */
 
 namespace MyFPS
@@ -15,19 +11,15 @@ namespace MyFPS
     {
         // [1] Variable.
         #region Variable
+        // [ ] - 1) .
+        public SceneFader fader;
+        // [ ] - 2) .
+        [SerializeField] private string loadToScene = "PlayScene";
         // [ ] - 1) GameObject.
         public GameObject pauseUI;
         // [ ] - 2) PlayerInput.
         public PlayerInput playerInput;
         #endregion Variable
-
-
-
-
-
-        // [2] Unity Event Method.
-        #region Unity Event Method
-        #endregion Unity Event Method
 
 
 
@@ -68,7 +60,7 @@ namespace MyFPS
         // [ ] - 2) 메뉴가기 버튼 호출.
         public void Menu()
         {
-            Debug.Log("Go to Menu!");
+            fader.FadeTo(loadToScene);
         }
         #endregion Custom Method
     }

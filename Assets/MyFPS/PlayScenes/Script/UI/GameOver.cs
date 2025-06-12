@@ -44,7 +44,8 @@ namespace MyFPS
         // [ ] - 1) Retry.
         public void Retry()
         {
-            fader.FadeTo(loadToScene);
+            int nowScene = PlayerDataManager.Instance.SceneNumber;
+            fader.FadeTo(nowScene);
         }
         // [ ] - 2) Menu.
         public void Menu()

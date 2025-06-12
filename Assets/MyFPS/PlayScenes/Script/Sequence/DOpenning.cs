@@ -4,6 +4,7 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem;
 using static Unity.Burst.Intrinsics.X86;
+using UnityEngine.SceneManagement;
 
 /* [0] 개요 : DOpenning
 		- MainScene02 오프닝 클래스.
@@ -36,10 +37,19 @@ namespace MyFPS
         // [ ] - 1) Start.
         private void Start()
         {
-            // [ ] - [ ] - 1) 커서 제어.
+            // [ ] - [ ] - 1) 게임데이터(씬 번호) 저장.
+            /* PlayerPrefs 모드
+            int sceneNumber = SceneManager.GetActiveScene().buildIndex;
+            PlayerPrefs.SetInt("SceneNumber", sceneNumber);
+            Debug.Log($"Save Scene Number : {sceneNumber}");
+            */
+            // [ ] - [ ] - 2) File System 모드.
+            PlayerDataManager.Instance.SceneNumber = SceneManager.GetActiveScene().buildIndex;
+            SaveLoad.SaveData();
+            // [ ] - [ ] - 2) 커서 제어.
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            // [ ] - [ ] - 2) 시퀀스 플레이. 
+            // [ ] - [ ] - 3) 시퀀스 플레이. 
             StartCoroutine(SequencePlay());
         }
         #endregion Unity Event Method
@@ -67,7 +77,7 @@ namespace MyFPS
 
             // [ ] - [ ] - 4) 메인 2번씬 설정
             PlayerDataManager.Instance.Weapon = WeaponType.Pistol;
-            // )        PlayerDataManager.Instance.AddAmmo(5);
+            PlayerDataManager.Instance.AddAmmo(5);
 
             // [ ] - [ ] - 5) 배경음 플레이.
             AudioManager.Instance.PlayBgm("Bgm02");
