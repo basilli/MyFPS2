@@ -20,6 +20,16 @@ namespace Unity.FPS.Gameplay
         [Tooltip("Used to flip the horizontal input axis")]
         public bool InvertXAxis = false;
 
+        // [1] Variable.
+        #region ▼▼▼▼▼ Variable ▼▼▼▼▼
+        // [◆] - ▶▶▶ Fire 버튼 상태 체크.
+        private bool wasfireInputHeld;
+
+
+        // [◆] - ▶▶▶ Aim 버튼 상태 체크.
+        private bool wasAimingInputHeld;
+        #endregion ▲▲▲▲▲ Variable ▲▲▲▲▲
+
 
         void Start()
         {   
@@ -29,7 +39,10 @@ namespace Unity.FPS.Gameplay
 
         void LateUpdate()
         {
-            
+            // Fire 버튼 상태 저장.
+            wasfireInputHeld = GetFireInputHeld();
+            // Aim 버튼 상태 체크.
+            wasAimingInputHeld = GetAimInputHeld();
         }
 
         public bool CanProcessInput()
@@ -135,6 +148,90 @@ namespace Unity.FPS.Gameplay
             return false;
         }
 
-        
+        // ) q,e키 또는 마우스 스크롤값을 받아와서 무기교체
+        public int GetSwitchWeaponInput()
+        {
+            if (CanProcessInput())
+            {
+                if (Input.GetAxis(GameConstants.k_AxisNameNextWeapon) > 0f)
+                {
+                    return 1;
+                }
+                else if (Input.GetAxis(GameConstants.k_AxisNameNextWeapon) < 0f)
+                {
+                    return -1;
+                }
+                else if (Input.GetAxis(GameConstants.k_MouseAxisNameScrollWheel) > 0f)
+                {
+                    return -1;
+                }
+                else if (Input.GetAxis(GameConstants.k_MouseAxisNameScrollWheel) < 0f)
+                {
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+        // ) 마우스 우클릭으로 누르고 있는 동안 조준 모드
+        public bool GetAimInputHeld()
+        {
+            if (CanProcessInput())
+            {
+                return Input.GetButton(GameConstants.k_ButtonNameAim);
+            }
+            return false;
+        }
+
+        // ) Fire버튼을 누르고 있을 때.
+        public bool GetFireInputHeld()
+        {
+            if (CanProcessInput())
+            {
+                return Input.GetButton(GameConstants.k_ButtonNameFire);
+            }
+            return false;
+        }
+
+        // ) 마우스 우클릭하여 조준모드를 시작할 때.
+        public bool GetAimInputDown()
+        {
+            if (CanProcessInput())
+            {
+                return !wasAimingInputHeld && GetAimInputHeld();
+            }
+            return false;
+        }
+
+        // ) 마우스 우클릭하여 조준모드를 끝낼 때.
+        public bool GetAimInputReleased()
+        {
+            if (CanProcessInput())
+            {
+                return wasAimingInputHeld && !GetAimInputHeld();
+            }
+            return false;
+        }
+
+        // ) Fire버튼을 누를 때(누르기 시작할 때).
+        public bool GetFireInputDown()
+        {
+            if (CanProcessInput())
+            {
+                return !wasfireInputHeld && GetFireInputHeld();
+            }
+            return false;
+        }
+
+        // ) Fire버튼을 뗄 때(누르기 끝날 때)
+        public bool GetFireInputReleased()
+        {
+            if (CanProcessInput())
+            {
+                return wasfireInputHeld && !GetFireInputHeld();
+            }
+            return false;
+        }
+
     }
 }
